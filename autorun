@@ -1,0 +1,49 @@
+#! /bin/sh
+# /etc/init.d/autorun
+#
+
+### BEGIN INIT INFO
+# Provides:          autorun
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     1 2 3 4 5 6
+# Default-Stop:      0
+# Short-Description: Start daemon at boot time
+# Description:       Enable service provided by daemon.
+### END INIT INFO
+
+# setting usbwifi
+
+
+# Some things that run always
+touch /var/lock/autorun
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    export PATH=$PATH:/usr/local/bin
+	modprobe rp_usbdisplay
+	sleep 1
+	modprobe -r rp_usbdisplay
+	modprobe rp_usbdisplay
+	sleep 1
+	modprobe -r rp_usbdisplay
+	modprobe rp_usbdisplay
+	cp /home/dmp/rpusbdisp-master/drivers/linux-driver/xserver_conf/10-disp.conf /usr/share/X11/xorg.conf.d/
+	sleep 2
+	export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python2.7/site-packages
+	nohup python /home/dmp/arcade.py &
+	sleep 1
+	#vba -1 --throttle=1000 --frameskip=3 --flash-128k /home/dmp/rom/GB\(1\).gb
+    ;;
+  stop)
+    ;;
+  *)
+    echo "Usage: /etc/init.d/autorun {start|stop}"
+
+    exit 1
+    ;;
+esac
+
+exit 0
+
